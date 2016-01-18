@@ -86,20 +86,24 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/Alamofire.framework"
   install_framework "Pods/DGElasticPullToRefresh.framework"
+  install_framework "Pods/ImagePickerSheetController.framework"
   install_framework "Pods/MJRefresh.framework"
   install_framework "Pods/PagingMenuController.framework"
   install_framework "Pods/SBJson.framework"
   install_framework "Pods/SDWebImage.framework"
+  install_framework "Pods/SKPhotoBrowser.framework"
   install_framework "Pods/SwiftyJSON.framework"
   install_framework "Pods/UIActivityIndicator_for_SDWebImage.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/Alamofire.framework"
   install_framework "Pods/DGElasticPullToRefresh.framework"
+  install_framework "Pods/ImagePickerSheetController.framework"
   install_framework "Pods/MJRefresh.framework"
   install_framework "Pods/PagingMenuController.framework"
   install_framework "Pods/SBJson.framework"
   install_framework "Pods/SDWebImage.framework"
+  install_framework "Pods/SKPhotoBrowser.framework"
   install_framework "Pods/SwiftyJSON.framework"
   install_framework "Pods/UIActivityIndicator_for_SDWebImage.framework"
 fi

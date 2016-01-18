@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>ImagePickerSheetController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MJRefresh.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -44,6 +49,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SKPhotoBrowser.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -67,17 +77,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2814EA99376902EA129ECA29CEC1CA98</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>3E0620F8FBBB1BAA2DEC8EBD1680156F</key>
+		<key>2AAAB9973850C35994DC04473435E1A3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>432ECC54282C84882B482CCB4CF227FC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4E5EE59DA1D19B2DEA671FCC57DBD29C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -92,17 +102,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>876AA2D9AD3CDDE507E305F29A28DC81</key>
+		<key>88A50E294F229FF9095658D35C938770</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A60ED7BA515BAF99D7F0037B095A6742</key>
+		<key>97C998DEA487BBFEF4851AF0DF39EABD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BFD88B6A342B0EFC849891B205727A65</key>
+		<key>BBA338FFEFCAA352EF9FE76DB765BD5D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C932DA13620EDC65F3E7F85C75B46482</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FE08597C64A98D27658D7785E9D06D3E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
