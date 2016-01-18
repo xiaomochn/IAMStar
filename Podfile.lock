@@ -1,0 +1,43 @@
+PODS:
+  - Alamofire (3.1.5)
+  - DGElasticPullToRefresh (1.0.2)
+  - MJRefresh (3.1.0)
+  - PagingMenuController (0.7.8)
+  - SBJson (4.0.2)
+  - SDWebImage (3.7.4):
+    - SDWebImage/Core (= 3.7.4)
+  - SDWebImage/Core (3.7.4)
+  - SwiftyJSON (2.3.2)
+  - UIActivityIndicator-for-SDWebImage (1.2):
+    - SDWebImage (~> 3.7)
+
+DEPENDENCIES:
+  - Alamofire (~> 3.0)
+  - DGElasticPullToRefresh (= 1.0.2)
+  - MJRefresh
+  - PagingMenuController
+  - SBJson (~> 4.0.2)
+  - SDWebImage (~> 3.7.3)
+  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
+  - UIActivityIndicator-for-SDWebImage
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: 929539eb6a3304eaa9153ca44041a78b85bf2ee5
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+SPEC CHECKSUMS:
+  Alamofire: 5f730ba29fd113b7ddd71c1e65d0c630acf5d7b0
+  DGElasticPullToRefresh: 49cc35f3509b46a58a8f45ae0165d0a8e0feccea
+  MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4
+  PagingMenuController: 5956215aab16efba1dd2bd7bc438f8ef856c2c2b
+  SBJson: c18691cc18375b14664ff0fec841f8c4faef1934
+  SDWebImage: 247edd7dd80dd6124197b0d6a17846fe9d1df968
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  UIActivityIndicator-for-SDWebImage: 7bf7ebbf0ed1747dedc0d6e949c4603a6d0f9e0c
+
+COCOAPODS: 0.39.0
