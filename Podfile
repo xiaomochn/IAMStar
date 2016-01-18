@@ -1,6 +1,6 @@
 platform :ios, '8.0'
 use_frameworks!
-
+pod 'MJRefresh'
 pod 'SDWebImage', '~> 3.7.3'
 pod 'UIActivityIndicator-for-SDWebImage'
 pod 'SBJson', '~> 4.0.2'
