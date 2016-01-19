@@ -157,7 +157,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ResultVC") as! ResultVC
         vc.urls = urls
-        self.navigationController?.pushViewController(vc, animated: true)
+//        self.navigationController?.pushViewController(vc, animated: true)
+         presentViewController(vc, animated: true, completion: nil)
         // create PhotoBrowser Instance, and present.
 //        let browser = SKPhotoBrowser(photos: images)
 //        browser.initializePageIndex(0)
