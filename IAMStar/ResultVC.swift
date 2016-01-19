@@ -13,7 +13,7 @@ class ResultVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        tableView.dataSource=self
         // Do any additional setup after loading the view.
     }
 
@@ -37,11 +37,14 @@ class ResultVC: UIViewController {
 extension ResultVC:UITableViewDelegate{
     
 }
-//extension ResultVC:UITableViewDataSource{
-//    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        
-//    }
-//    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 10
-//    }
-//}
+
+extension ResultVC:UITableViewDataSource{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("ResultCell") as! ResultCell
+        cell.image1.sd_setImageWithURL(NSURL(string: urls[indexPath.row]))
+            return cell
+    }
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return urls.count
+    }
+}

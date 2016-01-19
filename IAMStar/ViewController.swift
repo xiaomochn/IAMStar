@@ -141,7 +141,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             debugPrint("解析出错")
             return
         }
+        
         var images = [SKPhoto]()
+        var urls = [String]()
         for item in data["candidate"].array!{
 //            http://www.faceplusplus.com.cn/assets/demo-img2/
             var name = item["tag"].stringValue
@@ -151,11 +153,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             debugPrint(photo.photoURL)
 //            photo.shouldCachePhotoURLImage = true // you can use image cache by true(NSCache)
             images.append(photo)
+            urls.append(GlobalVariables.getFaceApiPicByName(name))
         }
-    
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ResultVC") as! ResultVC
+        vc.urls = urls
+        self.navigationController?.pushViewController(vc, animated: true)
         // create PhotoBrowser Instance, and present.
-        let browser = SKPhotoBrowser(photos: images)
-        browser.initializePageIndex(0)
-        presentViewController(browser, animated: true, completion: {})
+//        let browser = SKPhotoBrowser(photos: images)
+//        browser.initializePageIndex(0)
+//        presentViewController(browser, animated: true, completion: {})
     }
 }
