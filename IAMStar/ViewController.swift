@@ -43,7 +43,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 print("Fallback to camera roll as a source since the simulator doesn't support taking pictures")
             }
             controller.sourceType = sourceType
-            
+            controller.allowsEditing=true
             self.presentViewController(controller, animated: true, completion: nil)
         }
         
@@ -88,7 +88,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]){
         picker.dismissViewControllerAnimated(true, completion: nil)
 //        info[""]
-        let data = UIImagePNGRepresentation(info["UIImagePickerControllerOriginalImage"] as! UIImage)
+       let data = UIImageJPEGRepresentation(info["UIImagePickerControllerOriginalImage"] as! UIImage,0.2)
+//        let data = UIImagePNGRepresentation(info["UIImagePickerControllerOriginalImage"] as! UIImage,0.2)
         loadt(data!)
     }
 //
