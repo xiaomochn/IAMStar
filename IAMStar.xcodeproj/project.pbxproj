@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		977561DA77E3677F7EC57D0A /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7FBE6A9F79285BB47ECAA3 /* Pods.framework */; };
+		CD3270A31C4DDF920050D6D0 /* facehead.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CD3270A21C4DDF920050D6D0 /* facehead.jpg */; };
+		CD3270A91C4E04020050D6D0 /* ResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3270A81C4E04020050D6D0 /* ResultVC.swift */; };
+		CD3270AC1C4E05C10050D6D0 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3270AB1C4E05C10050D6D0 /* ResultCell.swift */; };
+		CD3270AE1C4E25DF0050D6D0 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3270AD1C4E25DF0050D6D0 /* GlobalVariables.swift */; };
 		CDC3F7771C4CE4130068709F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3F7761C4CE4130068709F /* AppDelegate.swift */; };
 		CDC3F7791C4CE4130068709F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3F7781C4CE4130068709F /* ViewController.swift */; };
 		CDC3F77C1C4CE4130068709F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC3F77A1C4CE4130068709F /* Main.storyboard */; };
@@ -36,6 +40,10 @@
 
 /* Begin PBXFileReference section */
 		16FB6AC9847DD3EFF09A28A3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		CD3270A21C4DDF920050D6D0 /* facehead.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = facehead.jpg; sourceTree = "<group>"; };
+		CD3270A81C4E04020050D6D0 /* ResultVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultVC.swift; sourceTree = "<group>"; };
+		CD3270AB1C4E05C10050D6D0 /* ResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
+		CD3270AD1C4E25DF0050D6D0 /* GlobalVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		CDC3F7731C4CE4130068709F /* IAMStar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IAMStar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC3F7761C4CE4130068709F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDC3F7781C4CE4130068709F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +96,40 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		CD3270A11C4DDF850050D6D0 /* res */ = {
+			isa = PBXGroup;
+			children = (
+				CD3270A21C4DDF920050D6D0 /* facehead.jpg */,
+			);
+			name = res;
+			sourceTree = "<group>";
+		};
+		CD3270A61C4E03A30050D6D0 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				CD3270AA1C4E05A00050D6D0 /* View */,
+				CD3270A71C4E03C40050D6D0 /* Controller */,
+				CD3270AD1C4E25DF0050D6D0 /* GlobalVariables.swift */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		CD3270A71C4E03C40050D6D0 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				CD3270A81C4E04020050D6D0 /* ResultVC.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		CD3270AA1C4E05A00050D6D0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CD3270AB1C4E05C10050D6D0 /* ResultCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		CDC3F76A1C4CE4130068709F = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +155,8 @@
 		CDC3F7751C4CE4130068709F /* IAMStar */ = {
 			isa = PBXGroup;
 			children = (
+				CD3270A61C4E03A30050D6D0 /* General */,
+				CD3270A11C4DDF850050D6D0 /* res */,
 				CDC3F7761C4CE4130068709F /* AppDelegate.swift */,
 				CDC3F7781C4CE4130068709F /* ViewController.swift */,
 				CDC3F77A1C4CE4130068709F /* Main.storyboard */,
@@ -220,7 +264,7 @@
 				TargetAttributes = {
 					CDC3F7721C4CE4130068709F = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 8EQ8DUTDZW;
+						DevelopmentTeam = L8LH37X3D9;
 					};
 					CDC3F7861C4CE4130068709F = {
 						CreatedOnToolsVersion = 7.2;
@@ -257,6 +301,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD3270A31C4DDF920050D6D0 /* facehead.jpg in Resources */,
 				CDC3F7811C4CE4130068709F /* LaunchScreen.storyboard in Resources */,
 				CDC3F77E1C4CE4130068709F /* Assets.xcassets in Resources */,
 				CDC3F77C1C4CE4130068709F /* Main.storyboard in Resources */,
@@ -333,7 +378,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDC3F7791C4CE4130068709F /* ViewController.swift in Sources */,
+				CD3270A91C4E04020050D6D0 /* ResultVC.swift in Sources */,
+				CD3270AC1C4E05C10050D6D0 /* ResultCell.swift in Sources */,
 				CDC3F7771C4CE4130068709F /* AppDelegate.swift in Sources */,
+				CD3270AE1C4E25DF0050D6D0 /* GlobalVariables.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
