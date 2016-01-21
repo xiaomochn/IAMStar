@@ -8,7 +8,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="IAMStar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="IAMStar" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -16,9 +16,58 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facehead.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="JvP-au-HCh">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="Ggz-g1-UVw"/>
+                                    <constraint firstAttribute="height" constant="128" id="SUF-By-Bpl"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Ggz-g1-UVw"/>
+                                        <exclude reference="SUF-By-Bpl"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="Ggz-g1-UVw"/>
+                                        <include reference="SUF-By-Bpl"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="JvP-au-HCh" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="PV2-yM-eaI"/>
+                            <constraint firstAttribute="trailing" secondItem="JvP-au-HCh" secondAttribute="trailing" constant="115" id="qWv-q1-AN1"/>
+                            <constraint firstItem="JvP-au-HCh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="swM-mz-Ubs"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="JvP-au-HCh"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="PV2-yM-eaI"/>
+                                <exclude reference="qWv-q1-AN1"/>
+                                <exclude reference="swM-mz-Ubs"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="JvP-au-HCh"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="PV2-yM-eaI"/>
+                                <include reference="qWv-q1-AN1"/>
+                                <include reference="swM-mz-Ubs"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="imageView" destination="JvP-au-HCh" id="kB9-sf-XNA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -33,6 +82,7 @@
                         <viewControllerLayoutGuide type="bottom" id="tLH-mG-JDS"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1NA-4z-Mbo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="GtZ-g6-Efu">
@@ -43,10 +93,14 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aEx-Ln-Gnz" id="j6u-aY-8wa">
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="99.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l8z-lp-8Hs">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facehead.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="l8z-lp-8Hs">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="0.0" y="0.0" width="240" height="99.5"/>
+                                                    </variation>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -98,10 +152,10 @@
                                 <exclude reference="GtZ-g6-Efu"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="9bq-Ii-ivx"/>
                                 <exclude reference="ZSa-qI-jnn"/>
                                 <exclude reference="it1-WO-aHU"/>
                                 <exclude reference="mgP-IU-qIf"/>
-                                <exclude reference="9bq-Ii-ivx"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -109,10 +163,10 @@
                                 <include reference="GtZ-g6-Efu"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="9bq-Ii-ivx"/>
                                 <include reference="ZSa-qI-jnn"/>
                                 <include reference="it1-WO-aHU"/>
                                 <include reference="mgP-IU-qIf"/>
-                                <include reference="9bq-Ii-ivx"/>
                             </mask>
                         </variation>
                     </view>
@@ -126,4 +180,7 @@
             <point key="canvasLocation" x="951.75" y="298.125"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="facehead.jpg" width="130" height="130"/>
+    </resources>
 </document>

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "IAMStar/ViewController.swift"
-            timestampString = "474875802.800996"
+            timestampString = "474969990.663736"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "afterSelected(_:)"
             landmarkType = "5">
          </BreakpointContent>

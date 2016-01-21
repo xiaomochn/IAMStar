@@ -22,6 +22,7 @@ import SwiftyJSON
 import SKPhotoBrowser
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    @IBOutlet weak var imageView: UIImageView!
     // MARK: View Lifecycle
     
     override func viewDidLoad() {
@@ -29,6 +30,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: "presentImagePickerSheet:")
         view.addGestureRecognizer(tapRecognizer)
+//          self.imageView.sd_setImageWithURL(NSURL(string: "http://www.faceplusplus.com.cn/assets/demo-img2/安吉丽娜 朱莉/9.jpg"))
+//        var tempstr = "http://www.faceplusplus.com.cn/assets/demo-img2/安吉丽娜 朱莉/9.jpg" as NSString
+//    "
+//        a.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
+//        self.imageView.sd_setImageWithURL(NSURL(string:tempstr as String), completed: { (UIImage, NSError, SDImageCacheType, NSURL) -> Void in
+//            let a = UIImage
+//            let b = NSError
+//            let c = SDImageCacheType
+//            let d = NSURL
+//        })
+        
     }
     
     // MARK: Other Methods
@@ -151,17 +163,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let photo = SKPhoto.photoWithImageURL(GlobalVariables.getFaceApiPicByName(name))
 //             let photo = SKPhoto.photoWithImageURL("http://h.hiphotos.baidu.com/image/h%3D300/sign=ece3e0add658ccbf04bcb33a29d8bcd4/aa18972bd40735fab9f007a699510fb30f2408a8.jpg")
             debugPrint(photo.photoURL)
-//            photo.shouldCachePhotoURLImage = true // you can use image cache by true(NSCache)
+            photo.shouldCachePhotoURLImage = true // you can use image cache by true(NSCache)
             images.append(photo)
             urls.append(GlobalVariables.getFaceApiPicByName(name))
         }
-        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ResultVC") as! ResultVC
-        vc.urls = urls
+//        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ResultVC") as! ResultVC
+//        vc.urls = urls
+//      
 //        self.navigationController?.pushViewController(vc, animated: true)
-         presentViewController(vc, animated: true, completion: nil)
+//         presentViewController(vc, animated: true, completion: nil)
         // create PhotoBrowser Instance, and present.
-//        let browser = SKPhotoBrowser(photos: images)
-//        browser.initializePageIndex(0)
-//        presentViewController(browser, animated: true, completion: {})
+        let browser = SKPhotoBrowser(photos: images)
+        browser.initializePageIndex(0)
+        presentViewController(browser, animated: true, completion: {})
     }
 }

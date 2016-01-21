@@ -16,8 +16,6 @@ class GlobalVariables: NSObject {
 //        let names = name.characters.split{ $0 == "|" }
         if names.count < 2
         {return "http://www.faceplusplus.com.cn/assets/"}
-        let a = names[0]
-   
-        return "http://www.faceplusplus.com.cn/assets/demo-img2/\(names[1])/\(names[0])"
+        return "http://www.faceplusplus.com.cn/assets/demo-img2/\(names[1])/\(names[0])".stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
     }
 }
