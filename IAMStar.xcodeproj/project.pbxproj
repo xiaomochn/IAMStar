@@ -13,6 +13,7 @@
 		CD3270A91C4E04020050D6D0 /* ResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3270A81C4E04020050D6D0 /* ResultVC.swift */; };
 		CD3270AC1C4E05C10050D6D0 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3270AB1C4E05C10050D6D0 /* ResultCell.swift */; };
 		CD3270AE1C4E25DF0050D6D0 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3270AD1C4E25DF0050D6D0 /* GlobalVariables.swift */; };
+		CD47CC5C1C570CDA00DD2247 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD47CC5B1C570CDA00DD2247 /* CoreGraphics.framework */; };
 		CDC3F7771C4CE4130068709F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3F7761C4CE4130068709F /* AppDelegate.swift */; };
 		CDC3F7791C4CE4130068709F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3F7781C4CE4130068709F /* ViewController.swift */; };
 		CDC3F77C1C4CE4130068709F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC3F77A1C4CE4130068709F /* Main.storyboard */; };
@@ -41,13 +42,14 @@
 
 /* Begin PBXFileReference section */
 		16FB6AC9847DD3EFF09A28A3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		CD19B06A1C4F92F600371EFC /* IAMStar-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IAMStar-Bridging-Header.h"; sourceTree = "<group>"; };
+		CD19B06A1C4F92F600371EFC /* IAMStar-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "IAMStar-Bridging-Header.h"; path = "IAMStar/IAMStar-Bridging-Header.h"; sourceTree = "<group>"; };
 		CD19B06B1C4F92F600371EFC /* FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixOrientation.h; sourceTree = "<group>"; };
 		CD19B06C1C4F92F600371EFC /* FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixOrientation.m; sourceTree = "<group>"; };
 		CD3270A21C4DDF920050D6D0 /* facehead.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = facehead.jpg; sourceTree = "<group>"; };
 		CD3270A81C4E04020050D6D0 /* ResultVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultVC.swift; sourceTree = "<group>"; };
 		CD3270AB1C4E05C10050D6D0 /* ResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
 		CD3270AD1C4E25DF0050D6D0 /* GlobalVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
+		CD47CC5B1C570CDA00DD2247 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		CDC3F7731C4CE4130068709F /* IAMStar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IAMStar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC3F7761C4CE4130068709F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDC3F7781C4CE4130068709F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD47CC5C1C570CDA00DD2247 /* CoreGraphics.framework in Frameworks */,
 				977561DA77E3677F7EC57D0A /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,7 +108,6 @@
 			children = (
 				CD19B06B1C4F92F600371EFC /* FixOrientation.h */,
 				CD19B06C1C4F92F600371EFC /* FixOrientation.m */,
-				CD19B06A1C4F92F600371EFC /* IAMStar-Bridging-Header.h */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -148,6 +150,7 @@
 		CDC3F76A1C4CE4130068709F = {
 			isa = PBXGroup;
 			children = (
+				CD19B06A1C4F92F600371EFC /* IAMStar-Bridging-Header.h */,
 				CDC3F7751C4CE4130068709F /* IAMStar */,
 				CDC3F78A1C4CE4130068709F /* IAMStarTests */,
 				CDC3F7951C4CE4130068709F /* IAMStarUITests */,
@@ -203,6 +206,7 @@
 		F325F76404369E4C3F9DA3C3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CD47CC5B1C570CDA00DD2247 /* CoreGraphics.framework */,
 				CE7FBE6A9F79285BB47ECAA3 /* Pods.framework */,
 			);
 			name = Frameworks;

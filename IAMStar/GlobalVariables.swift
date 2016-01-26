@@ -9,13 +9,11 @@
 import UIKit
 
 class GlobalVariables: NSObject {
-    class func getFaceApiPicByName(name :String)->String{
+    class func getFaceApiPicByName(name :String)->(url: String,name: String){
         let temp = name as NSString
-        
-       let names = temp.componentsSeparatedByString("|")
-//        let names = name.characters.split{ $0 == "|" }
+        let names = temp.componentsSeparatedByString("|")
         if names.count < 2
-        {return "http://www.faceplusplus.com.cn/assets/"}
-        return "http://www.faceplusplus.com.cn/assets/demo-img2/\(names[1])/\(names[0])".stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        {return ("http://www.faceplusplus.com.cn/assets/","")}
+        return ("http://www.faceplusplus.com.cn/assets/demo-img2/\(names[1])/\(names[0])".stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!,names[1])
     }
 }

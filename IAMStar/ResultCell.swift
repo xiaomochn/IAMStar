@@ -11,6 +11,7 @@ import SwiftyJSON
 import SDWebImage
 class ResultCell: UITableViewCell {
 
+    @IBOutlet weak var content: UILabel!
     @IBOutlet weak var image1: UIImageView!
     @IBOutlet weak var image2: UIImageView!
     var data:JSON{

@@ -10,7 +10,7 @@
 
 @implementation FixOrientation
 
-- (UIImage *)fixOrientation:(UIImage *)aImage {
++ (UIImage *)fixOrientation:(UIImage *)aImage {
     
     // No-op if the orientation is already correct
     if (aImage.imageOrientation == UIImageOrientationUp)
@@ -60,6 +60,7 @@
     
     // Now we draw the underlying CGImage into a new context, applying the transform
     // calculated above.
+
     CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
                                              CGImageGetBitsPerComponent(aImage.CGImage), 0,
                                              CGImageGetColorSpace(aImage.CGImage),

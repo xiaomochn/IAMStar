@@ -7,13 +7,16 @@
 //
 
 import UIKit
-
+import SKPhotoBrowser
+import SwiftyJSON
 class ResultVC: UIViewController {
-    var urls :[String]!
+    var data:JSON!
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource=self
+        tableView.delegate=self
+        tableView.rowHeight=UIScreen.mainScreen().applicationFrame.width
         // Do any additional setup after loading the view.
     }
 
@@ -35,17 +38,30 @@ class ResultVC: UIViewController {
 
 }
 extension ResultVC:UITableViewDelegate{
-    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+                var images = [SKPhoto]()
+                for item in data.array!{
+                    let name = item["tag"].stringValue
+                    let photo = SKPhoto.photoWithImageURL(GlobalVariables.getFaceApiPicByName(name).url)
+                    photo.shouldCachePhotoURLImage = true // you can use image cache by true(NSCache)
+                    images.append(photo)
+                }
+    let browser = SKPhotoBrowser(photos: images)
+     browser.initializePageIndex(indexPath.row)
+     presentViewController(browser, animated: true, completion: {})
+    }
 }
 
 extension ResultVC:UITableViewDataSource{
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ResultCell") as! ResultCell
-        cell.image1.sd_setImageWithURL(NSURL(string: urls[indexPath.row]))
-        let cell1 = UITableViewCell()
-            return cell
+        let item = data[indexPath.row]
+        let urlname=GlobalVariables.getFaceApiPicByName(item["tag"].stringValue)
+        cell.image1.sd_setImageWithURL(NSURL(string:urlname.url))
+        cell.content.text="姓名:\(urlname.name )  相似度: \(item["similarity"].floatValue)"
+        return cell
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return urls.count
+        return data.arrayValue.count
     }
 }
