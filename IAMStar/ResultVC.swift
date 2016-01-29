@@ -69,7 +69,7 @@ extension ResultVC:UITableViewDataSource{
         let item = data[indexPath.row]
         let urlname=GlobalVariables.getFaceApiPicByName(item["tag"].stringValue)
         cell.image1.sd_setImageWithURL(NSURL(string:urlname.url))
-        cell.content.text="姓名:\(urlname.name )  相似度: \(item["similarity"].floatValue)"
+        cell.content.text="\(urlname.name )  相似度: \(item["similarity"].floatValue)"
         return cell
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
