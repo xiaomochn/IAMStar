@@ -119,7 +119,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         //        info[""]
         
         //        let data = UIImagePNGRepresentation(info["UIImagePickerControllerOriginalImage"] as! UIImage,0.2)
-        loadt(info["UIImagePickerControllerOriginalImage"] as! UIImage)
+        loadt(info["UIImagePickerControllerEditedImage"] as! UIImage)
     }
     //
     
@@ -150,6 +150,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             self.printNote("链接服务器失败", progressing: false)
                             return
                         }
+                           debugPrint("\(response.result.value!)")
                         let json=JSON(response.result.value!)
                         let faceid = json["face"][0]["face_id"]
                         if faceid.error != nil
@@ -168,7 +169,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                                 return;
                             }
                             let tempJson = JSON(serial)
-                            self.toResultVC(tempJson)
+                            self.toResultVC(tempJson,image: imgTemp)
                         }
                     }
                 case .Failure(let encodingError):
@@ -178,7 +179,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         )
         
     }
-    func toResultVC(data :JSON){
+    func toResultVC(data :JSON,image:UIImage){
         if data["candidate"].error != nil{
             debugPrint("解析出错")
             self.printNote("搜索失败", progressing: false)
@@ -188,6 +189,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ResultVC") as! ResultVC
         vc.data = data["candidate"]
         vc.title="结果"
+        vc.image=image
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

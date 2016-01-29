@@ -9,15 +9,26 @@
 import UIKit
 import SKPhotoBrowser
 import SwiftyJSON
+import Material
 class ResultVC: UIViewController {
     var data:JSON!
+    var image:UIImage!
     @IBOutlet weak var tableView: UITableView!
+ 
+    @IBOutlet weak var sourceImgHight: NSLayoutConstraint!
+    @IBOutlet weak var sourceImage: ImageCardView!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource=self
         tableView.delegate=self
         tableView.rowHeight=UIScreen.mainScreen().applicationFrame.width
+        sourceImage.divider=false
+        sourceImgHight.constant=100 * self.image.size.height / self.image.size.width
+        let imageView=UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: sourceImgHight.constant))
+        imageView.image=self.image
+        sourceImage.addSubview(imageView)
         // Do any additional setup after loading the view.
+       
     }
 
     override func didReceiveMemoryWarning() {
