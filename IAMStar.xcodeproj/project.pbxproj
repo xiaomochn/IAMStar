@@ -283,7 +283,7 @@
 				TargetAttributes = {
 					CDC3F7721C4CE4130068709F = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = L8LH37X3D9;
+						DevelopmentTeam = 8EQ8DUTDZW;
 					};
 					CDC3F7861C4CE4130068709F = {
 						CreatedOnToolsVersion = 7.2;
