@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import SDWebImage
+import DGElasticPullToRefresh
 class ResultCell: UITableViewCell {
 
     @IBOutlet weak var content: UILabel!
@@ -22,6 +23,7 @@ class ResultCell: UITableViewCell {
     }
     override func awakeFromNib() {
         super.awakeFromNib()
+     
         // Initialization code
     }
 

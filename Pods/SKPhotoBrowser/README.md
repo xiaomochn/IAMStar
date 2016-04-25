@@ -14,6 +14,7 @@ Simple PhotoBrowser/Viewer inspired by facebook, twitter photo browsers written 
 - has simple ability to custom photobrowser. (hide/show statusbar, some toolbar for controls, swipe control)
 - Handling and caching photos from web
 - Landscape handling.
+- Delete photo support(by offbye). By set displayDelete=true show a delete icon in statusbar, deleted indexes can be obtain from delegate func didDeleted 
 
 ![sample](Screenshots/example01.gif)
 
@@ -67,7 +68,6 @@ images.append(photo)
 
 // create PhotoBrowser Instance, and present. 
 let browser = SKPhotoBrowser(photos: images)
-browser.initializePageIndex(0)
 presentViewController(browser, animated: true, completion: {})
 ```
 
@@ -75,8 +75,8 @@ If you want to use zooming effect from an existing view, use another initializer
 ```swift
 // e.g.: some tableView or collectionView.
 func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-   let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ExampleCollectionViewCell
-   let originImage = cell.exampleImageView.image! // some image for baseImage 
+   let cell = collectionView.cellForItemAtIndexPath(indexPath) 
+   let originImage = cell.exampleImageView.image // some image for baseImage 
    let browser = SKPhotoBrowser(originImage: originImage, photos: images, animatedFromView: cell) 
    browser.initializePageIndex(indexPath.row)
    presentViewController(browser, animated: true, completion: {})
@@ -98,8 +98,12 @@ let browser = SKPhotoBrowser(originImage: originImage, photos: images, animatedF
 browser.displayToolbar = false                // all tool bar will be hidden
 browser.displayCounterLabel = false           // counter label will be hidden
 browser.displayBackAndForwardButton = false   // back / forward button will be hidden
-browser.displayAction = false   // action button will be hidden
+browser.displayAction = false                 // action button will be hidden
+browser.displayDeleteButton = true            // delete button will be shown
 ```
+
+#### Delete
+You can delete your photo for your own hanlding
 
 #### Photo Captions
 Photo captions can be displayed simply bottom of PhotoBrowser. by setting the `caption` property on specific photos:
@@ -124,10 +128,12 @@ browser.isForceStatusBarHidden = true
 ``` 
 
 #### Delegate
-There's some trigger point you can handle using delegate.
+There's some trigger point you can handle using delegate. those are optional.
 - didShowPhotoAtIndex(index:Int) 
 - willDismissAtPageIndex(index:Int)
 - didDismissAtPageIndex(index:Int)
+- didDismissActionSheetWithButtonIndex(buttonIndex: Int, photoIndex: Int)
+- removePhoto(browser: SKPhotoBrowser, index: Int, reload: (() -> Void))
 
 ```swift
 let browser = SKPhotoBrowser(originImage: originImage, photos: images, animatedFromView: cell)

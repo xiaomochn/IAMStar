@@ -1,0 +1,6 @@
+framework module DGElasticPullToRefresh_CanStartLoading {
+  umbrella header "DGElasticPullToRefresh_CanStartLoading-umbrella.h"
+
+  export *
+  module * { export * }
+}

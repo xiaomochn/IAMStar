@@ -30,6 +30,12 @@
 
 import UIKit
 
+@objc
+public enum SideNavigationPosition : NSInteger {
+	case Left
+	case Right
+}
+
 public extension UIViewController {
 	/**
 	A convenience property that provides access to the SideNavigationViewController. 
@@ -54,88 +60,90 @@ public protocol SideNavigationViewControllerDelegate {
 	An optional delegation method that is fired before the 
 	SideNavigationViewController opens.
 	*/
-	optional func sideNavigationViewWillOpen(sideNavigationViewController: SideNavigationViewController)
+	optional func sideNavigationViewWillOpen(sideNavigationViewController: SideNavigationViewController, position: SideNavigationPosition)
 	
 	/**
 	An optional delegation method that is fired after the
 	SideNavigationViewController opened.
 	*/
-	optional func sideNavigationViewDidOpen(sideNavigationViewController: SideNavigationViewController)
+	optional func sideNavigationViewDidOpen(sideNavigationViewController: SideNavigationViewController, position: SideNavigationPosition)
 	
 	/**
 	An optional delegation method that is fired before the
 	SideNavigationViewController closes.
 	*/
-	optional func sideNavigationViewWillClose(sideNavigationViewController: SideNavigationViewController)
+	optional func sideNavigationViewWillClose(sideNavigationViewController: SideNavigationViewController, position: SideNavigationPosition)
 	
 	/**
 	An optional delegation method that is fired after the
 	SideNavigationViewController closed.
 	*/
-	optional func sideNavigationViewDidClose(sideNavigationViewController: SideNavigationViewController)
+	optional func sideNavigationViewDidClose(sideNavigationViewController: SideNavigationViewController, position: SideNavigationPosition)
 	
 	/**
 	An optional delegation method that is fired when the
 	SideNavigationViewController pan gesture begins.
 	*/
-	optional func sideNavigationViewPanDidBegin(sideNavigationViewController: SideNavigationViewController, point: CGPoint)
+	optional func sideNavigationViewPanDidBegin(sideNavigationViewController: SideNavigationViewController, point: CGPoint, position: SideNavigationPosition)
 	
 	/**
 	An optional delegation method that is fired when the
 	SideNavigationViewController pan gesture changes position.
 	*/
-	optional func sideNavigationViewPanDidChange(sideNavigationViewController: SideNavigationViewController, point: CGPoint)
+	optional func sideNavigationViewPanDidChange(sideNavigationViewController: SideNavigationViewController, point: CGPoint, position: SideNavigationPosition)
 	
 	/**
 	An optional delegation method that is fired when the
 	SideNavigationViewController pan gesture ends.
 	*/
-	optional func sideNavigationViewPanDidEnd(sideNavigationViewController: SideNavigationViewController, point: CGPoint)
+	optional func sideNavigationViewPanDidEnd(sideNavigationViewController: SideNavigationViewController, point: CGPoint, position: SideNavigationPosition)
 	
 	/**
 	An optional delegation method that is fired when the
-	SideNavigationViewController tap gesture begins.
+	SideNavigationViewController tap gesture executes.
 	*/
-	optional func sideNavigationViewDidTap(sideNavigationViewController: SideNavigationViewController, point: CGPoint)
+	optional func sideNavigationViewDidTap(sideNavigationViewController: SideNavigationViewController, point: CGPoint, position: SideNavigationPosition)
 }
 
 @objc(SideNavigationViewController)
 public class SideNavigationViewController: UIViewController, UIGestureRecognizerDelegate {
 	/**
-	A CGPoint property that is used internally to track
-	the original position of the sideView when panning began.
+	A CGFloat property that is used internally to track
+	the original (x) position of the container view when panning.
 	*/
-	private var originalPosition: CGPoint = CGPointZero
+	private var originalX: CGFloat = 0
 	
 	/**
 	A UIPanGestureRecognizer property internally used for the
 	pan gesture.
 	*/
-	private var sidePanGesture: UIPanGestureRecognizer?
+	private var panGesture: UIPanGestureRecognizer?
 	
 	/**
 	A UITapGestureRecognizer property internally used for the 
 	tap gesture.
 	*/
-	private var sideTapGesture: UITapGestureRecognizer?
+	private var tapGesture: UITapGestureRecognizer?
 	
 	/**
-	A CAShapeLayer property that is used as the backdrop when 
-	opened. To change the opacity and color of the backdrop, 
-	it is recommended to use the backdropOpcaity property and 
-	backdropColor property, respectively.
-	*/
-	public private(set) lazy var backdropLayer: CAShapeLayer = CAShapeLayer()
-	
-	/**
-	A CGFloat property that accesses the horizontal threshold of
+	A CGFloat property that accesses the leftView threshold of
 	the SideNavigationViewController. When the panning gesture has
-	ended, if the position is beyond the horizontal threshold,
-	the sideView is opened, if it is below the threshold, the
-	sideView is closed. The horizontal threshold is always at half
-	the width of the sideView.
+	ended, if the position is beyond the threshold,
+	the leftView is opened, if it is below the threshold, the
+	leftView is closed. The leftViewThreshold is always at half
+	the width of the leftView.
 	*/
-	public private(set) var horizontalThreshold: CGFloat = 0
+	public private(set) var leftViewThreshold: CGFloat = 0
+	
+	/**
+	A CGFloat property that accesses the rightView threshold of
+	the SideNavigationViewController. When the panning gesture has
+	ended, if the position is beyond the threshold,
+	the rightView is closed, if it is below the threshold, the
+	rightView is opened. The rightViewThreshold is always at half
+	the width of the rightView.
+	*/
+	public private(set) var rightViewThreshold: CGFloat = 0
 	
 	/**
 	A SideNavigationViewControllerDelegate property used to bind
@@ -158,64 +166,101 @@ public class SideNavigationViewController: UIViewController, UIGestureRecognizer
 	
 	/**
 	A CGFloat property that sets the animation duration of the
-	sideView when closing and opening. Defaults to 0.25.
+	leftView when closing and opening. Defaults to 0.25.
 	*/
 	public var animationDuration: CGFloat = 0.25
 	
 	/**
-	A Boolean property that enables and disables the sideView from
+	A Boolean property that enables and disables the leftView from
 	opening and closing. Defaults to true.
 	*/
-	public var enabled: Bool = true {
+	public var enabled: Bool {
+		get {
+			return enabledLeftView || enabledRightView
+		}
+		set(value) {
+			if nil != leftView {
+				enabledLeftView = value
+			}
+			if nil != rightView {
+				enabledRightView = value
+			}
+		}
+	}
+	
+	/**
+	A Boolean property that enables and disables the leftView from
+	opening and closing. Defaults to true.
+	*/
+	public var enabledLeftView: Bool = false {
 		didSet {
-			if enabled {
-				removeGestures(&sidePanGesture, tap: &sideTapGesture)
-				prepareGestures(&sidePanGesture, panSelector: "handlePanGesture:", tap: &sideTapGesture, tapSelector: "handleTapGesture:")
-			} else {
-				removeGestures(&sidePanGesture, tap: &sideTapGesture)
+			if enabledLeftView {
+				prepareGestures(panSelector: "handlePanGesture:", tapSelector: "handleTapGesture:")
+			} else if !enabledRightView {
+				removeGestures()
+			}
+		}
+	}
+	
+	/**
+	A Boolean property that enables and disables the rightView from
+	opening and closing. Defaults to true.
+	*/
+	public var enabledRightView: Bool = false {
+		didSet {
+			if enabledRightView {
+				prepareGestures(panSelector: "handlePanGesture:", tapSelector: "handleTapGesture:")
+			} else if !enabledLeftView {
+				removeGestures()
 			}
 		}
 	}
 	
 	/**
 	A Boolean property that triggers the status bar to be hidden
-	when the sideView is opened. Defaults to true.
+	when the leftView is opened. Defaults to true.
 	*/
 	public var hideStatusBar: Bool = true
 	
 	/**
 	A MaterialDepth property that is used to set the depth of the
-	sideView when opened.
+	leftView when opened.
 	*/
-	public var depth: MaterialDepth = .Depth2
+	public var depth: MaterialDepth = .Depth1
 	
 	/**
 	A MaterialView property that is used to hide and reveal the
-	sideViewController. It is very rare that this property will 
+	leftViewController. It is very rare that this property will
 	need to be accessed externally.
 	*/
-	public private(set) var sideView: MaterialView!
-	
-	/// A CGFloat property to set the backdropLayer color opacity.
-	public var backdropOpacity: CGFloat = 0.5 {
-		didSet {
-			backdropLayer.backgroundColor = backdropColor?.colorWithAlphaComponent(backdropOpacity).CGColor
-		}
-	}
-	
-	/// A UIColor property to set the backdropLayer color.
-	public var backdropColor: UIColor? {
-		didSet {
-			backdropLayer.backgroundColor = backdropColor?.colorWithAlphaComponent(backdropOpacity).CGColor
-		}
-	}
+	public private(set) var leftView: MaterialView?
 	
 	/**
-	A Boolean property that indicates whether the sideView 
-	is opened.
+	A MaterialView property that is used to hide and reveal the
+	rightViewController. It is very rare that this property will
+	need to be accessed externally.
 	*/
+	public private(set) var rightView: MaterialView?
+	
+	/// Indicates whether the leftView or rightView is opened.
 	public var opened: Bool {
-		return sideView.x != -sideViewWidth
+		return openedLeftView || openedRightView
+	}
+	
+	/// indicates if the leftView is opened.
+	public var openedLeftView: Bool {
+		guard nil != leftView else {
+			return false
+		}
+		return leftView!.x != -leftViewWidth
+	}
+	
+	/// Indicates if the rightView is opened.
+	public var openedRightView: Bool {
+		guard nil != rightView else {
+			return false
+		}
+		return rightView!.x != view.bounds.width
 	}
 	
 	/**
@@ -228,39 +273,51 @@ public class SideNavigationViewController: UIViewController, UIGestureRecognizer
 	
 	/**
 	A UIViewController property that references the 
-	active side UIViewController.
+	active left UIViewController.
 	*/
-	public private(set) var sideViewController: UIViewController!
+	public private(set) var leftViewController: UIViewController?
 	
 	/**
-	A CGFloat property to access the width the sideView
+	A UIViewController property that references the
+	active right UIViewController.
+	*/
+	public private(set) var rightViewController: UIViewController?
+	
+	/**
+	A CGFloat property to access the width that the leftView
 	opens up to.
 	*/
-	public private(set) var sideViewWidth: CGFloat = 240
+	public private(set) var leftViewWidth: CGFloat = 240
+	
+	/**
+	A CGFloat property to access the width that the rightView
+	opens up to.
+	*/
+	public private(set) var rightViewWidth: CGFloat = 240
 	
 	/**
 	An initializer for the SideNavigationViewController.
 	- Parameter mainViewController: The main UIViewController.
-	- Parameter sideViewController: The side UIViewController.
+	- Parameter leftViewController: An Optional left UIViewController.
+	- Parameter rightViewController: An Optional right UIViewController.
 	*/
-	public convenience init(mainViewController: UIViewController, sideViewController: UIViewController) {
+	public convenience init(mainViewController: UIViewController, leftViewController: UIViewController? = nil, rightViewController: UIViewController? = nil) {
 		self.init()
 		self.mainViewController = mainViewController
-		self.sideViewController = sideViewController
+		self.leftViewController = leftViewController
+		self.rightViewController = rightViewController
 		prepareView()
 	}
 	
 	public override func viewWillLayoutSubviews() {
 		super.viewWillLayoutSubviews()
-		MaterialAnimation.animationDisabled { [unowned self] in
-			self.backdropLayer.frame = self.view.bounds
-			self.sideView.width = self.sideViewWidth
-			self.sideView.height = self.view.bounds.height
+		layoutSubviews()
+	}
+	
+	public override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+		if let v: MaterialView = rightView {
+			v.x = view.bounds.height - (openedRightView ? rightViewWidth : 0)
 		}
-		horizontalThreshold = sideViewWidth / 2
-		sideViewController.view.frame.size.width = sideView.width
-		sideViewController.view.frame.size.height = sideView.height
-		sideViewController.view.center = CGPointMake(sideView.width / 2, sideView.height / 2)
 	}
 	
 	/**
@@ -279,120 +336,272 @@ public class SideNavigationViewController: UIViewController, UIGestureRecognizer
 	the transition animation from the active mainViewController
 	to the toViewController has completed.
 	*/
-	public func transitionFromMainViewController(toViewController: UIViewController, duration: NSTimeInterval, options: UIViewAnimationOptions, animations: (() -> Void)?, completion: ((Bool) -> Void)?) {
+	public func transitionFromMainViewController(toViewController: UIViewController, duration: NSTimeInterval = 0.5, options: UIViewAnimationOptions = [], animations: (() -> Void)? = nil, completion: ((Bool) -> Void)? = nil) {
 		mainViewController.willMoveToParentViewController(nil)
 		addChildViewController(toViewController)
-		toViewController.view.frame = view.bounds
+		toViewController.view.frame = mainViewController.view.frame
 		transitionFromViewController(mainViewController,
 			toViewController: toViewController,
 			duration: duration,
 			options: options,
 			animations: animations,
-			completion: { [unowned self, mainViewController = self.mainViewController] (result: Bool) in
-				mainViewController.removeFromParentViewController()
+			completion: { [unowned self] (result: Bool) in
 				toViewController.didMoveToParentViewController(self)
+				self.mainViewController.removeFromParentViewController()
 				self.mainViewController = toViewController
-				self.userInteractionEnabled = !self.opened
+				self.view.sendSubviewToBack(self.mainViewController.view)
 				completion?(result)
-		})
+			})
 	}
 	
 	/**
-	A method that is used to set the width of the sideView when 
-	opened. This is the recommended method of setting the sideView 
+	A method that is used to set the width of the leftView when 
+	opened. This is the recommended method of setting the leftView 
 	width.
 	- Parameter width: A CGFloat value to set as the new width.
-	- Parameter hidden: A Boolean value of whether the sideView
+	- Parameter hidden: A Boolean value of whether the leftView
 	should be hidden after the width has been updated or not.
 	- Parameter animated: A Boolean value that indicates to animate
-	the sideView width change.
+	the leftView width change.
 	*/
-	public func setSideViewWidth(width: CGFloat, hidden: Bool, animated: Bool) {
-		let w: CGFloat = (hidden ? -width : width) / 2
-		sideViewWidth = width
-		
-		if animated {
-			MaterialAnimation.animateWithDuration(0.25, animations: { [unowned self] in
-				self.sideView.width = width
-				self.sideView.position.x = w
-			}) { [unowned self] in
-				self.userInteractionEnabled = false
+	public func setLeftViewWidth(width: CGFloat, var hidden: Bool, animated: Bool, duration: NSTimeInterval = 0.5) {
+		if let v: MaterialView = leftView {
+			leftViewWidth = width
+			
+			if openedRightView {
+				hidden = true
 			}
-		} else {
-			MaterialAnimation.animationDisabled { [unowned self] in
-				self.sideView.width = width
-				self.sideView.position.x = w
+			
+			if animated {
+				v.shadowPathAutoSizeEnabled = false
+				
+				if hidden {
+					UIView.animateWithDuration(duration,
+						animations: { [unowned self] in
+							v.bounds.size.width = width
+							v.position.x = -width / 2
+							self.mainViewController.view.alpha = 1
+						}) { [unowned self] _ in
+							v.shadowPathAutoSizeEnabled = true
+							self.layoutSubviews()
+							self.hideView(v)
+					}
+				} else {
+					UIView.animateWithDuration(duration,
+						animations: { [unowned self] in
+							v.bounds.size.width = width
+							v.position.x = width / 2
+							self.mainViewController.view.alpha = 0.5
+						}) { [unowned self] _ in
+							v.shadowPathAutoSizeEnabled = true
+							self.layoutSubviews()
+							self.showView(v)
+					}
+				}
+			} else {
+				v.bounds.size.width = width
+				if hidden {
+					hideView(v)
+					v.position.x = -v.width / 2
+					mainViewController.view.alpha = 1
+				} else {
+					v.shadowPathAutoSizeEnabled = false
+					
+					showView(v)
+					v.position.x = width / 2
+					mainViewController.view.alpha = 0.5
+					v.shadowPathAutoSizeEnabled = true
+				}
+				layoutSubviews()
+			}
+
+		}
+	}
+	
+	/**
+	A method that is used to set the width of the rightView when
+	opened. This is the recommended method of setting the rightView
+	width.
+	- Parameter width: A CGFloat value to set as the new width.
+	- Parameter hidden: A Boolean value of whether the rightView
+	should be hidden after the width has been updated or not.
+	- Parameter animated: A Boolean value that indicates to animate
+	the rightView width change.
+	*/
+	public func setRightViewWidth(width: CGFloat, var hidden: Bool, animated: Bool, duration: NSTimeInterval = 0.5) {
+		if let v: MaterialView = rightView {
+			rightViewWidth = width
+			
+			if openedLeftView {
+				hidden = true
+			}
+			
+			if animated {
+				v.shadowPathAutoSizeEnabled = false
+				
+				if hidden {
+					UIView.animateWithDuration(duration,
+						animations: { [unowned self] in
+							v.bounds.size.width = width
+							v.position.x = self.view.bounds.width + width / 2
+							self.mainViewController.view.alpha = 1
+						}) { [unowned self] _ in
+							v.shadowPathAutoSizeEnabled = true
+							self.layoutSubviews()
+							self.hideView(v)
+						}
+				} else {
+					UIView.animateWithDuration(duration,
+						animations: { [unowned self] in
+							v.bounds.size.width = width
+							v.position.x = self.view.bounds.width - width / 2
+							self.mainViewController.view.alpha = 0.5
+						}) { [unowned self] _ in
+							v.shadowPathAutoSizeEnabled = true
+							self.layoutSubviews()
+							self.showView(v)
+						}
+				}
+			} else {
+				v.bounds.size.width = width
+				if hidden {
+					hideView(v)
+					v.position.x = view.bounds.width + v.width / 2
+					mainViewController.view.alpha = 1
+				} else {
+					v.shadowPathAutoSizeEnabled = false
+					
+					showView(v)
+					v.position.x = view.bounds.width - width / 2
+					mainViewController.view.alpha = 0.5
+					v.shadowPathAutoSizeEnabled = true
+				}
+				layoutSubviews()
 			}
 		}
 	}
 	
 	/**
-	A method that toggles the sideView opened if previously closed, 
+	A method that toggles the leftView opened if previously closed,
 	or closed if previously opened.
 	- Parameter velocity: A CGFloat value that sets the 
 	velocity of the user interaction when animating the
-	sideView. Defaults to 0.
+	leftView. Defaults to 0.
 	*/
-	public func toggle(velocity: CGFloat = 0) {
-		opened ? close(velocity) : open(velocity)
+	public func toggleLeftView(velocity: CGFloat = 0) {
+		openedLeftView ? closeLeftView(velocity) : openLeftView(velocity)
 	}
 	
 	/**
-	A method that opens the sideView.
+	A method that toggles the rightView opened if previously closed,
+	or closed if previously opened.
 	- Parameter velocity: A CGFloat value that sets the
 	velocity of the user interaction when animating the
-	sideView. Defaults to 0.
+	leftView. Defaults to 0.
 	*/
-	public func open(velocity: CGFloat = 0) {
-		toggleStatusBar(true)
-		backdropLayer.hidden = false
-		
-		delegate?.sideNavigationViewWillOpen?(self)
-		
-		MaterialAnimation.animateWithDuration(Double(0 == velocity ? animationDuration : fmax(0.1, fmin(1, Double(sideView.x / velocity)))),
-		animations: { [unowned self] in
-			self.sideView.position = CGPointMake(self.sideView.width / 2, self.sideView.height / 2)
-		}) { [unowned self] in
-			self.userInteractionEnabled = false
-			self.showSideViewDepth()
-			self.delegate?.sideNavigationViewDidOpen?(self)
+	public func toggleRightView(velocity: CGFloat = 0) {
+		openedRightView ? closeRightView(velocity) : openRightView(velocity)
+	}
+	
+	/**
+	A method that opens the leftView.
+	- Parameter velocity: A CGFloat value that sets the
+	velocity of the user interaction when animating the
+	leftView. Defaults to 0.
+	*/
+	public func openLeftView(velocity: CGFloat = 0) {
+		if enabledLeftView {
+			if let v: MaterialView = leftView {
+				toggleStatusBar(true)
+				showView(v)
+				
+				delegate?.sideNavigationViewWillOpen?(self, position: .Left)
+				UIView.animateWithDuration(Double(0 == velocity ? animationDuration : fmax(0.1, fmin(1, Double(v.x / velocity)))),
+				animations: { [unowned self] in
+					v.position.x = v.width / 2
+					self.mainViewController.view.alpha = 0.5
+				}) { _ in
+					self.delegate?.sideNavigationViewDidOpen?(self, position: .Left)
+				}
+			}
 		}
 	}
 	
 	/**
-	A method that closes the sideView.
+	A method that opens the rightView.
 	- Parameter velocity: A CGFloat value that sets the
 	velocity of the user interaction when animating the
-	sideView. Defaults to 0.
+	leftView. Defaults to 0.
 	*/
-	public func close(velocity: CGFloat = 0) {
-		toggleStatusBar(false)
-		backdropLayer.hidden = true
-		
-		delegate?.sideNavigationViewWillClose?(self)
-		
-		MaterialAnimation.animateWithDuration(Double(0 == velocity ? animationDuration : fmax(0.1, fmin(1, Double(sideView.x / velocity)))),
-		animations: { [unowned self] in
-			self.sideView.position = CGPointMake(-self.sideView.width / 2, self.sideView.height / 2)
-		}) { [unowned self] in
-			self.userInteractionEnabled = true
-			self.hideSideViewDepth()
-			self.delegate?.sideNavigationViewDidClose?(self)
+	public func openRightView(velocity: CGFloat = 0) {
+		if enabledRightView {
+			if let v: MaterialView = rightView {
+				toggleStatusBar(true)
+				showView(v)
+				
+				delegate?.sideNavigationViewWillOpen?(self, position: .Right)
+				UIView.animateWithDuration(Double(0 == velocity ? animationDuration : fmax(0.1, fmin(1, Double(v.x / velocity)))),
+					animations: { [unowned self] in
+						v.position.x = self.view.bounds.width - v.width / 2
+						self.mainViewController.view.alpha = 0.5
+					}) { _ in
+						self.delegate?.sideNavigationViewDidOpen?(self, position: .Right)
+					}
+			}
+		}
+	}
+	
+	/**
+	A method that closes the leftView.
+	- Parameter velocity: A CGFloat value that sets the
+	velocity of the user interaction when animating the
+	leftView. Defaults to 0.
+	*/
+	public func closeLeftView(velocity: CGFloat = 0) {
+		if enabledLeftView {
+			if let v: MaterialView = leftView {
+				delegate?.sideNavigationViewWillClose?(self, position: .Left)
+				UIView.animateWithDuration(Double(0 == velocity ? animationDuration : fmax(0.1, fmin(1, Double(v.x / velocity)))),
+				animations: { [unowned self] in
+					v.position.x = -v.width / 2
+					self.mainViewController.view.alpha = 1
+				}) { _ in
+					self.toggleStatusBar()
+					self.hideView(v)
+					self.delegate?.sideNavigationViewDidClose?(self, position: .Left)
+				}
+			}
+		}
+	}
+	
+	/**
+	A method that closes the rightView.
+	- Parameter velocity: A CGFloat value that sets the
+	velocity of the user interaction when animating the
+	leftView. Defaults to 0.
+	*/
+	public func closeRightView(velocity: CGFloat = 0) {
+		if enabledRightView {
+			if let v: MaterialView = rightView {
+				delegate?.sideNavigationViewWillClose?(self, position: .Right)
+				UIView.animateWithDuration(Double(0 == velocity ? animationDuration : fmax(0.1, fmin(1, Double(v.x / velocity)))),
+				animations: { [unowned self] in
+					v.position.x = self.view.bounds.width + v.width / 2
+					self.mainViewController.view.alpha = 1
+				}) { _ in
+					self.toggleStatusBar()
+					self.hideView(v)
+					self.delegate?.sideNavigationViewDidClose?(self, position: .Right)
+				}
+			}
 		}
 	}
 	
 	public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-		if enabled {
-			if gestureRecognizer == sidePanGesture {
-				return opened || enabled && isPointContainedWithinRect(touch.locationInView(view))
-			}
-			if opened && gestureRecognizer == sideTapGesture {
-				let point: CGPoint = touch.locationInView(view)
-				delegate?.sideNavigationViewDidTap?(self, point: point)
-				return !isPointContainedWithinViewController(sideView, point: point)
-			}
+		if gestureRecognizer == panGesture {
+			return opened || isPointContainedWithinLeftViewThreshold(touch.locationInView(view)) || isPointContainedWithinRightViewThreshold(touch.locationInView(view))
 		}
-		return false
+		return opened && gestureRecognizer == tapGesture
 	}
 	
 	/**
@@ -402,33 +611,81 @@ public class SideNavigationViewController: UIViewController, UIGestureRecognizer
 	passed to the handler when recognized.
 	*/
 	internal func handlePanGesture(recognizer: UIPanGestureRecognizer) {
-		switch recognizer.state {
-		case .Began:
-			backdropLayer.hidden = false
-			originalPosition = sideView.position
-			toggleStatusBar(true)
-			showSideViewDepth()
-			delegate?.sideNavigationViewPanDidBegin?(self, point: sideView.position)
-		case .Changed:
-			let translation: CGPoint = recognizer.translationInView(sideView)
-			let w: CGFloat = sideView.width
-			
-			MaterialAnimation.animationDisabled { [unowned self] in
-				self.sideView.position.x = self.originalPosition.x + translation.x > (w / 2) ? (w / 2) : self.originalPosition.x + translation.x
-				self.delegate?.sideNavigationViewPanDidChange?(self, point: self.sideView.position)
+		// Deterine which view to pan.
+		if enabledRightView && (openedRightView || !openedLeftView && isPointContainedWithinRightViewThreshold(recognizer.locationInView(view))) {
+			if let v: MaterialView = rightView {
+				let point: CGPoint = recognizer.locationInView(view)
+				
+				// Animate the panel.
+				switch recognizer.state {
+				case .Began:
+					originalX = v.position.x
+					
+					toggleStatusBar(true)
+					showView(v)
+					
+					delegate?.sideNavigationViewPanDidBegin?(self, point: point, position: .Right)
+				case .Changed:
+					let w: CGFloat = v.width
+					let translationX: CGFloat = recognizer.translationInView(v).x
+					
+					v.position.x = originalX + translationX < view.bounds.width - (w / 2) ? view.bounds.width - (w / 2) : originalX + translationX
+					
+					let a: CGFloat = 1 - (view.bounds.width - v.position.x) / v.width
+					mainViewController.view.alpha = 0.5 < a ? a : 0.5
+					
+					delegate?.sideNavigationViewPanDidChange?(self, point: point, position: .Right)
+				case .Ended, .Cancelled, .Failed:
+					let p: CGPoint = recognizer.velocityInView(recognizer.view)
+					let x: CGFloat = p.x >= 1000 || p.x <= -1000 ? p.x : 0
+					
+					delegate?.sideNavigationViewPanDidEnd?(self, point: point, position: .Right)
+					
+					if v.x >= rightViewThreshold || x > 1000 {
+						closeRightView(x)
+					} else {
+						openRightView(x)
+					}
+				case .Possible:break
+				}
 			}
-		case .Ended, .Cancelled, .Failed:
-			let point: CGPoint = recognizer.velocityInView(recognizer.view)
-			let x: CGFloat = point.x >= 1000 || point.x <= -1000 ? point.x : 0
-			
-			delegate?.sideNavigationViewPanDidEnd?(self, point: sideView.position)
-			
-			if sideView.x <= CGFloat(floor(-sideViewWidth)) + horizontalThreshold || point.x <= -1000 {
-				close(x)
-			} else {
-				open(x)
+		} else if enabledLeftView && (openedLeftView || !openedRightView && isPointContainedWithinLeftViewThreshold(recognizer.locationInView(view))) {
+			if let v: MaterialView = leftView {
+				let point: CGPoint = recognizer.locationInView(view)
+				
+				// Animate the panel.
+				switch recognizer.state {
+				case .Began:
+					originalX = v.position.x
+					
+					toggleStatusBar(true)
+					showView(v)
+					
+					delegate?.sideNavigationViewPanDidBegin?(self, point: point, position: .Left)
+				case .Changed:
+					let w: CGFloat = v.width
+					let translationX: CGFloat = recognizer.translationInView(v).x
+					
+					v.position.x = originalX + translationX > (w / 2) ? (w / 2) : originalX + translationX
+					
+					let a: CGFloat = 1 - v.position.x / v.width
+					mainViewController.view.alpha = 0.5 < a ? a : 0.5
+					
+					delegate?.sideNavigationViewPanDidChange?(self, point: point, position: .Left)
+				case .Ended, .Cancelled, .Failed:
+					let p: CGPoint = recognizer.velocityInView(recognizer.view)
+					let x: CGFloat = p.x >= 1000 || p.x <= -1000 ? p.x : 0
+					
+					delegate?.sideNavigationViewPanDidEnd?(self, point: point, position: .Left)
+					
+					if v.x <= -leftViewWidth + leftViewThreshold || x < -1000 {
+						closeLeftView(x)
+					} else {
+						openLeftView(x)
+					}
+				case .Possible:break
+				}
 			}
-		case .Possible:break
 		}
 	}
 	
@@ -439,120 +696,141 @@ public class SideNavigationViewController: UIViewController, UIGestureRecognizer
 	passed to the handler when recognized.
 	*/
 	internal func handleTapGesture(recognizer: UITapGestureRecognizer) {
-		if opened {
-			close()
+		if openedLeftView {
+			if let v: MaterialView = leftView {
+				delegate?.sideNavigationViewDidTap?(self, point: recognizer.locationInView(view), position: .Left)
+				if enabledLeftView && openedLeftView && !isPointContainedWithinView(v, point: recognizer.locationInView(v)) {
+					closeLeftView()
+				}
+			}
+		}
+		if openedRightView {
+			if let v: MaterialView = rightView {
+				delegate?.sideNavigationViewDidTap?(self, point: recognizer.locationInView(view), position: .Right)
+				if enabledRightView && openedRightView && !isPointContainedWithinView(v, point: recognizer.locationInView(v)) {
+					closeRightView()
+				}
+			}
 		}
 	}
 	
-	/**
-	A method that generally prepares the SideNavigationViewController.
-	*/
+	/// A method that generally prepares the SideNavigationViewController.
 	private func prepareView() {
-		prepareBackdropLayer()
 		prepareMainViewController()
-		prepareSideView()
+		prepareLeftView()
+		prepareRightView()
+		prepareLeftViewController()
+		prepareRightViewController()
+		enabled = true
 	}
 	
-	/**
-	A method that prepares the mainViewController.
-	*/
+	/// A method that prepares the mainViewController.
 	private func prepareMainViewController() {
 		prepareViewControllerWithinContainer(mainViewController, container: view)
 		mainViewController.view.frame = view.bounds
 	}
 	
-	/**
-	A method that prepares the sideViewController.
-	*/
-	private func prepareSideViewController() {
-		sideViewController.view.clipsToBounds = true
-		prepareViewControllerWithinContainer(sideViewController, container: sideView)
-	}
-	
-	/**
-	A method that prepares the sideView.
-	*/
-	private func prepareSideView() {
-		sideView = MaterialView()
-		sideView.frame = CGRectMake(0, 0, sideViewWidth, view.frame.height)
-		sideView.backgroundColor = MaterialColor.clear
-		view.addSubview(sideView)
-		
-		MaterialAnimation.animationDisabled { [unowned self] in
-			self.sideView.position.x = -self.sideViewWidth / 2
-			self.sideView.zPosition = 1000
+	/// A method that prepares the leftViewController.
+	private func prepareLeftViewController() {
+		if let v: MaterialView = leftView {
+			leftViewController?.view.clipsToBounds = true
+			prepareViewControllerWithinContainer(leftViewController, container: v)
 		}
-		
-		prepareSideViewController()
-		removeGestures(&sidePanGesture, tap: &sideTapGesture)
-		prepareGestures(&sidePanGesture, panSelector: "handlePanGesture:", tap: &sideTapGesture, tapSelector: "handleTapGesture:")
 	}
 	
-	/**
-	A method that prepares the backdropLayer.
-	*/
-	private func prepareBackdropLayer() {
-		backdropColor = MaterialColor.black
-		backdropLayer.zPosition = 900
-		backdropLayer.hidden = true
-		view.layer.addSublayer(backdropLayer)
+	/// A method that prepares the rightViewController.
+	private func prepareRightViewController() {
+		if let v: MaterialView = rightView {
+			rightViewController?.view.clipsToBounds = true
+			prepareViewControllerWithinContainer(rightViewController, container: v)
+		}
+	}
+	
+	/// A method that prepares the leftView.
+	private func prepareLeftView() {
+		if nil != leftViewController {
+			leftView = MaterialView()
+			leftView!.frame = CGRectMake(0, 0, leftViewWidth, view.frame.height)
+			leftView!.backgroundColor = MaterialColor.clear
+			leftView!.shadowPathAutoSizeEnabled = true
+			view.addSubview(leftView!)
+			
+			leftView!.hidden = true
+			leftView!.position.x = -leftViewWidth / 2
+			leftView!.zPosition = 2000
+		} else {
+			enabledLeftView = false
+		}
+	}
+	
+	/// A method that prepares the leftView.
+	private func prepareRightView() {
+		if nil != rightViewController {
+			rightView = MaterialView()
+			rightView!.frame = CGRectMake(0, 0, rightViewWidth, view.frame.height)
+			rightView!.backgroundColor = MaterialColor.clear
+			rightView!.shadowPathAutoSizeEnabled = true
+			view.addSubview(rightView!)
+			
+			rightView!.hidden = true
+			rightView!.position.x = view.bounds.width + rightViewWidth / 2
+			rightView!.zPosition = 2000
+		} else {
+			enabledRightView = false
+		}
 	}
 	
 	/**
 	A method that adds the passed in controller as a child of 
 	the SideNavigationViewController within the passed in 
 	container view.
-	- Parameter controller: A UIViewController to add as a child.
+	- Parameter viewController: A UIViewController to add as a child.
 	- Parameter container: A UIView that is the parent of the 
 	passed in controller view within the view hierarchy.
 	*/
-	private func prepareViewControllerWithinContainer(controller: UIViewController, container: UIView) {
-		addChildViewController(controller)
-		container.addSubview(controller.view)
-		controller.didMoveToParentViewController(self)
+	private func prepareViewControllerWithinContainer(viewController: UIViewController?, container: UIView) {
+		if let v: UIViewController = viewController {
+			addChildViewController(v)
+			container.addSubview(v.view)
+			v.didMoveToParentViewController(self)
+		}
 	}
 	
 	/**
 	A method that prepares the gestures used within the 
 	SideNavigationViewController.
-	- Parameter pan: A UIPanGestureRecognizer that is used to 
-	recognize pan gestures.
 	- Parameter panSelector: A Selector that is fired when the
 	pan gesture is recognized.
-	- Parameter tap: A UITapGestureRecognizer that is used to 
-	recognize tap gestures.
 	- Parameter tapSelector: A Selector that is fired when the
 	tap gesture is recognized.
 	*/
-	private func prepareGestures(inout pan: UIPanGestureRecognizer?, panSelector: Selector, inout tap: UITapGestureRecognizer?, tapSelector: Selector) {
-		if nil == pan {
-			pan = UIPanGestureRecognizer(target: self, action: panSelector)
-			pan!.delegate = self
-			view.addGestureRecognizer(pan!)
+	private func prepareGestures(panSelector panSelector: Selector, tapSelector: Selector) {
+		if nil == panGesture {
+			panGesture = UIPanGestureRecognizer(target: self, action: panSelector)
+			panGesture!.delegate = self
+			view.addGestureRecognizer(panGesture!)
 		}
-		if nil == tap {
-			tap = UITapGestureRecognizer(target: self, action: tapSelector)
-			tap!.delegate = self
-			view.addGestureRecognizer(tap!)
+		
+		if nil == tapGesture {
+			tapGesture = UITapGestureRecognizer(target: self, action: tapSelector)
+			tapGesture!.cancelsTouchesInView = false
+			tapGesture!.delegate = self
+			view.addGestureRecognizer(tapGesture!)
 		}
 	}
 	
 	/**
 	A method that removes the passed in pan and tap gesture 
 	recognizers.
-	- Parameter pan: A UIPanGestureRecognizer that should be 
-	removed from the SideNavigationViewController.
-	- Parameter tap: A UITapGestureRecognizer that should be 
-	removed from the SideNavigationViewController.
 	*/
-	private func removeGestures(inout pan: UIPanGestureRecognizer?, inout tap: UITapGestureRecognizer?) {
-		if let v: UIPanGestureRecognizer = pan {
+	private func removeGestures() {
+		if let v: UIPanGestureRecognizer = panGesture {
 			view.removeGestureRecognizer(v)
-			pan = nil
+			panGesture = nil
 		}
-		if let v: UITapGestureRecognizer = tap {
+		if let v: UITapGestureRecognizer = tapGesture {
 			view.removeGestureRecognizer(v)
-			tap = nil
+			tapGesture = nil
 		}
 	}
 	
@@ -565,21 +843,39 @@ public class SideNavigationViewController: UIViewController, UIGestureRecognizer
 	*/
 	private func toggleStatusBar(hide: Bool = false) {
 		if hideStatusBar {
-			UIApplication.sharedApplication().statusBarHidden = hide
+			// General alignment.
+			if .iPhone == MaterialDevice.type && MaterialDevice.landscape {
+				UIApplication.sharedApplication().statusBarHidden = true
+			} else {
+				UIApplication.sharedApplication().statusBarHidden = opened ? true : hide
+			}
 		}
 	}
 	
 	/**
 	A method that determines whether the passed point is
-	contained within the bounds of the horizontalThreshold
+	contained within the bounds of the leftViewThreshold
 	and height of the SideNavigationViewController view frame
 	property.
 	- Parameter point: A CGPoint to test against.
 	- Returns: A Boolean of the result, true if yes, false 
 	otherwise.
 	*/
-	private func isPointContainedWithinRect(point: CGPoint) -> Bool {
-		return CGRectContainsPoint(CGRectMake(0, 0, horizontalThreshold, view.frame.height), point)
+	private func isPointContainedWithinLeftViewThreshold(point: CGPoint) -> Bool {
+		return point.x <= leftViewThreshold
+	}
+	
+	/**
+	A method that determines whether the passed point is
+	contained within the bounds of the rightViewThreshold
+	and height of the SideNavigationViewController view frame
+	property.
+	- Parameter point: A CGPoint to test against.
+	- Returns: A Boolean of the result, true if yes, false
+	otherwise.
+	*/
+	private func isPointContainedWithinRightViewThreshold(point: CGPoint) -> Bool {
+		return point.x >= rightViewThreshold
 	}
 	
 	/**
@@ -592,26 +888,54 @@ public class SideNavigationViewController: UIViewController, UIGestureRecognizer
 	- Returns: A Boolean of the result, true if yes, false
 	otherwise.
 	*/
-	private func isPointContainedWithinViewController(container: UIView, point: CGPoint) -> Bool {
-		return CGRectContainsPoint(container.frame, point)
+	private func isPointContainedWithinView(container: UIView, point: CGPoint) -> Bool {
+		return CGRectContainsPoint(container.bounds, point)
 	}
 	
 	/**
-	A method that adds the depth to the sideView depth property.
+	A method that shows a view.
+	- Parameter container: A container view.
 	*/
-	private func showSideViewDepth() {
-		MaterialAnimation.animationDisabled { [unowned self] in
-			self.sideView.depth = self.depth
+	private func showView(container: MaterialView) {
+		userInteractionEnabled = false
+		container.depth = depth
+		container.hidden = false
+	}
+	
+	/**
+	A method that hides a view.
+	- Parameter container: A container view.
+	*/
+	private func hideView(container: MaterialView) {
+		userInteractionEnabled = true
+		container.depth = .None
+		container.hidden = true
+	}
+	
+	/// Layout subviews.
+	private func layoutSubviews() {
+		toggleStatusBar()
+			
+		if let v: MaterialView = leftView {
+			v.width = leftViewWidth
+			v.height = view.bounds.height
+			leftViewThreshold = leftViewWidth / 2
+			if let vc: UIViewController = leftViewController {
+				vc.view.frame.size.width = v.width
+				vc.view.frame.size.height = v.height
+				vc.view.center = CGPointMake(v.width / 2, v.height / 2)
+			}
 		}
-	}
-	
-	/**
-	A method that removes the depth from the sideView depth 
-	property.
-	*/
-	private func hideSideViewDepth() {
-		MaterialAnimation.animationDisabled { [unowned self] in
-			self.sideView.depth = .None
+		
+		if let v: MaterialView = rightView {
+			v.width = rightViewWidth
+			v.height = view.bounds.height
+			rightViewThreshold = view.bounds.width - rightViewWidth / 2
+			if let vc: UIViewController = rightViewController {
+				vc.view.frame.size.width = v.width
+				vc.view.frame.size.height = v.height
+				vc.view.center = CGPointMake(v.width / 2, v.height / 2)
+			}
 		}
 	}
 }

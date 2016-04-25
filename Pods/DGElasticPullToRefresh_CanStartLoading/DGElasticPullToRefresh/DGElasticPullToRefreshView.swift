@@ -60,6 +60,11 @@ public class DGElasticPullToRefreshView: UIView {
             if previousValue == .Dragging && newValue == .AnimatingBounce {
                 loadingView?.startAnimating()
                 animateBounce()
+            } else if previousValue == .Stopped && newValue == .AnimatingBounce
+            {
+                loadingView?.setPullProgress(1.0)
+                loadingView?.startAnimating()
+                animateBounce()
             } else if newValue == .Loading && actionHandler != nil {
                 actionHandler()
             } else if newValue == .AnimatingToStopped {
@@ -151,6 +156,7 @@ public class DGElasticPullToRefreshView: UIView {
     // MARK: -
     
     deinit {
+        observing = false
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
@@ -198,7 +204,20 @@ public class DGElasticPullToRefreshView: UIView {
     }
     
     func stopLoading() {
+        // Prevent stop close animation
+        if state == .AnimatingToStopped {
+            return
+        }
         state = .AnimatingToStopped
+    }
+    
+    func startLoading() {
+        //Only Stopped can StartLoading
+        if state != .Stopped
+        {
+            return
+        }
+        state = .AnimatingBounce
     }
     
     // MARK: Methods (Private)

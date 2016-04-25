@@ -42,8 +42,8 @@ public class RaisedButton : MaterialButton {
 		super.prepareView()
 		setTitleColor(MaterialColor.white, forState: .Normal)
 		backgroundColor = MaterialColor.blue.accent3
-		depth = .Depth2
-		cornerRadius = .Radius1
-		contentInsetPreset = .WideRectangle3
+		depth = .Depth1
+		cornerRadiusPreset = .Radius1
+		contentEdgeInsetsPreset = .WideRectangle3
 	}
 }

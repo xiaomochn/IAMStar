@@ -85,7 +85,7 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/Alamofire.framework"
-  install_framework "Pods/DGElasticPullToRefresh.framework"
+  install_framework "Pods/DGElasticPullToRefresh_CanStartLoading.framework"
   install_framework "Pods/ImagePickerSheetController.framework"
   install_framework "Pods/MJRefresh.framework"
   install_framework "Pods/Material.framework"
@@ -98,7 +98,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/Alamofire.framework"
-  install_framework "Pods/DGElasticPullToRefresh.framework"
+  install_framework "Pods/DGElasticPullToRefresh_CanStartLoading.framework"
   install_framework "Pods/ImagePickerSheetController.framework"
   install_framework "Pods/MJRefresh.framework"
   install_framework "Pods/Material.framework"

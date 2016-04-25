@@ -185,6 +185,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.printNote("搜索失败", progressing: false)
             return
         }
+   
+        if self.navigationController?.viewControllers.count>1{
+            return
+        }
         self.printNote("", progressing: false)
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ResultVC") as! ResultVC
         vc.data = data["candidate"]
