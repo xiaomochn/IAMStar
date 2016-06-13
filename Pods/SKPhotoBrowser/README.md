@@ -3,9 +3,8 @@ SKPhotoBrowser
 
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Cocoapods Compatible](https://img.shields.io/cocoapods/v/SKPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/SKPhotoBrowser)
-[![Swift 2.0](https://img.shields.io/badge/Swift-2.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
 
-Simple PhotoBrowser/Viewer inspired by facebook, twitter photo browsers written by swift2.0, based on [IDMPhotoBrowser](https://github.com/ideaismobile/IDMPhotoBrowser), [MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser).
+Simple PhotoBrowser/Viewer inspired by facebook, twitter photo browsers written by swift, based on [IDMPhotoBrowser](https://github.com/ideaismobile/IDMPhotoBrowser), [MWPhotoBrowser](https://github.com/mwaterfall/MWPhotoBrowser).
 
 ## features
 - Can display one or more images by providing either `UIImage` objects, or string of URL array.
@@ -16,7 +15,7 @@ Simple PhotoBrowser/Viewer inspired by facebook, twitter photo browsers written 
 - Landscape handling.
 - Delete photo support(by offbye). By set displayDelete=true show a delete icon in statusbar, deleted indexes can be obtain from delegate func didDeleted 
 
-![sample](Screenshots/example01.gif)
+![sample](Screenshots/example02.gif)
 
 ## Requirements
 - iOS 8.0+
@@ -71,6 +70,18 @@ let browser = SKPhotoBrowser(photos: images)
 presentViewController(browser, animated: true, completion: {})
 ```
 
+from local files:
+```swift
+// images from local files
+var images = [SKLocalPhoto]()
+let photo = SKLocalPhoto.photoWithImageURL("..some_local_path/150x150.png")
+images.append(photo)
+
+// create PhotoBrowser Instance, and present. 
+let browser = SKPhotoBrowser(photos: images)
+presentViewController(browser, animated: true, completion: {})
+```
+
 If you want to use zooming effect from an existing view, use another initializer:
 ```swift
 // e.g.: some tableView or collectionView.
@@ -102,8 +113,24 @@ browser.displayAction = false                 // action button will be hidden
 browser.displayDeleteButton = true            // delete button will be shown
 ```
 
-#### Delete
-You can delete your photo for your own hanlding
+#### CustomButton Image
+Close button is able to change image and frame.
+``` swift
+browser.displayCustomCloseButton = true // custom close button will be enable
+browser.customCloseButtonImage = UIImage(named: "some.png")
+browser.customCloseButtonShowFrame = CGRect()
+browser.customCloseButtonHideFrame = CGRect()
+```
+Delete button is able to change image and frame.
+``` swift
+browser.displayCustomDeleteButton = true // custom delete button will be enable
+browser.customDeleteButtonImage = UIImage(named: "some.png")
+browser.customDeleteButtonShowFrame = CGRect()
+browser.customDeleteButtonHideFrame = CGRect()
+```
+
+#### Delete 
+You can delete your photo for your own hanlding.
 
 #### Photo Captions
 Photo captions can be displayed simply bottom of PhotoBrowser. by setting the `caption` property on specific photos:

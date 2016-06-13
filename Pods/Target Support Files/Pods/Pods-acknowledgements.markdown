@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-## DGElasticPullToRefresh_CanStartLoading
+## DGElasticPullToRefresh
 
 The MIT License (MIT)
 

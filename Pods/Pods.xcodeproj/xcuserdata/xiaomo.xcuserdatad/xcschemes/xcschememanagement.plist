@@ -9,7 +9,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>DGElasticPullToRefresh_CanStartLoading.xcscheme</key>
+		<key>DGElasticPullToRefresh.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -20,6 +20,16 @@
 			<false/>
 		</dict>
 		<key>MJRefresh.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Material-io.cosmicmind.material.fonts.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Material-io.cosmicmind.material.icons.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -72,12 +82,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>09EBEAB50D61980992F06BB3392CBF0E</key>
+		<key>03A33D96C4333116B0C57D1B82CFDD03</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0CFC670A34EBF94C90694E4654346EE6</key>
+		<key>115824B7CB2E76E5ACB836A251E79404</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -87,12 +97,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>26EF81F83CFADE4E15336745A472E9AB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>2AAAB9973850C35994DC04473435E1A3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>42AE3536147B123DF5A38B5525EFCFF6</key>
+		<key>2F3991806AB0A0055EEA948E2372265C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -102,7 +117,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>5CF139B7D6298D56C0BB5770372D711F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>6847254D016329D4A531D34ED2B6DF81</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6F20E324D863E55247117AA1745DDAEC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>71CF2E4601C7C86B4770A5D203B12CAC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,27 +142,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AF02B7DC5C7EC72EFD46AA7BF171A534</key>
+		<key>87074D5BF7E62CB912E49ACF0408F5BB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B65C4C45CDA6FA7FD65BDB5283CAFDC9</key>
+		<key>BC1536C3F721D249B70DC580804111F9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C80A72E22BD0903419B1DC4BB11C973E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C99D58D196FEAFCFF6383B8645F7073F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F1A1447EDCFE34C35825472909F5E504</key>
+		<key>C4FF14EC9E7A04BDF05B4CFE1F7D8F79</key>
 		<dict>
 			<key>primary</key>
 			<true/>

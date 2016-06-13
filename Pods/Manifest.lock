@@ -1,22 +1,22 @@
 PODS:
-  - Alamofire (3.2.1)
-  - DGElasticPullToRefresh_CanStartLoading (1.0.3.2)
+  - Alamofire (3.3.1)
+  - DGElasticPullToRefresh (1.0.3)
   - ImagePickerSheetController (0.9.1)
-  - Material (1.35.2)
+  - Material (1.40.0)
   - MJRefresh (3.1.0)
-  - PagingMenuController (0.8.0)
+  - PagingMenuController (0.9.1)
   - SBJson (4.0.2)
   - SDWebImage (3.7.5):
     - SDWebImage/Core (= 3.7.5)
   - SDWebImage/Core (3.7.5)
-  - SKPhotoBrowser (1.5.1)
+  - SKPhotoBrowser (1.8.6)
   - SwiftyJSON (2.3.2)
   - UIActivityIndicator-for-SDWebImage (1.2):
     - SDWebImage (~> 3.7)
 
 DEPENDENCIES:
   - Alamofire (~> 3.0)
-  - DGElasticPullToRefresh_CanStartLoading
+  - DGElasticPullToRefresh
   - ImagePickerSheetController (~> 0.9.1)
   - Material (~> 1.0)
   - MJRefresh
@@ -24,28 +24,19 @@ DEPENDENCIES:
   - SBJson (~> 4.0.2)
   - SDWebImage (~> 3.7.3)
   - SKPhotoBrowser
-  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
+  - SwiftyJSON
   - UIActivityIndicator-for-SDWebImage
 
-EXTERNAL SOURCES:
-  SwiftyJSON:
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
-
-CHECKOUT OPTIONS:
-  SwiftyJSON:
-    :commit: 42bdb102d2624b143c07850ebdc1537d5b6579b6
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
-
 SPEC CHECKSUMS:
-  Alamofire: f11d8624a05f5d39e0c99309b3e600a3ba64298a
-  DGElasticPullToRefresh_CanStartLoading: 09aba716bb6dff732ac5eb58b11cc215bbb743bb
+  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
+  DGElasticPullToRefresh: 040f39ae69840b3261d163fe6735c5901bf851e9
   ImagePickerSheetController: 3c58c9fee6dcf36485222358a021f6b734f997ba
-  Material: 7c665524d67837ca18c1d3b585069de628cd0d6f
+  Material: b69e09c2ff1b1d1d5d897b07cd1da586357a9912
   MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4
-  PagingMenuController: 1a9ff8ad0ab9704f215706997c1a624bc951f508
+  PagingMenuController: 95bab00761e1ba4f4f9fa6bf22ac71b065a675aa
   SBJson: c18691cc18375b14664ff0fec841f8c4faef1934
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
-  SKPhotoBrowser: ce51fc2cbfadef0e8969721da46a307ff1d29653
+  SKPhotoBrowser: 2fa59b851b04358b186c811ca9e2b4aa4945aa33
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
   UIActivityIndicator-for-SDWebImage: 7bf7ebbf0ed1747dedc0d6e949c4603a6d0f9e0c
 

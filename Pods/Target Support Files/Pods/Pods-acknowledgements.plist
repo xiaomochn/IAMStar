@@ -65,7 +65,7 @@ SOFTWARE.
 
 </string>
 			<key>Title</key>
-			<string>DGElasticPullToRefresh_CanStartLoading</string>
+			<string>DGElasticPullToRefresh</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
